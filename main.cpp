@@ -1,12 +1,13 @@
 #include <iostream>
+#include <fstream>
 
 void check_arg(int n) { 
     if(n == 1) {
-        std::cout << "Too few arguments" << std::endl;
+        std::cerr << "Too few arguments" << std::endl;
         exit(1);
 	}
     else if(n == 2) {
-        std::cout << "More arguments is required" << std::endl;
+        std::cerr << "More arguments is required" << std::endl;
         exit(1);
     }
 }
@@ -14,8 +15,25 @@ void check_arg(int n) {
 int main(int argc, char **argv) {
     check_arg(argc);
 
-    std::cout << "Video file name is: " << argv[1] << std::endl;
-    std::cout << "Image file name is: " << argv[2] << std::endl;
+    //argv[1] - video.yuv
+    std::ifstream video;
+
+    video.open(argv[1], std::ios::binary);
+    if(!video)
+    {
+        std::cerr << "Can not open file " << argv[1] << std::endl;
+        exit(1);
+    }
+
+    //argv[2] - image.bmp
+    std::ofstream image;
+    image.open(argv[2], std::ios::binary);
+    if(!image)
+    {
+        std::cerr << "Can not open file " << argv[2] << std::endl;
+        exit(1);
+    }
+
 
 	return 0;
 }
