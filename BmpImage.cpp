@@ -7,7 +7,7 @@ BmpImage::BmpImage(const std::string &name)
     std::ifstream stream(name, std::ios::binary);
     if(!stream)
     {
-        std::cerr << "ERROR: Can not open file " << name << "." << std::endl;
+        std::cerr << "ERROR: Could not open file " << name << "for reading." << std::endl;
         exit(1);
     }
 
@@ -15,7 +15,7 @@ BmpImage::BmpImage(const std::string &name)
     stream.read(reinterpret_cast<char *>(&info_), sizeof(BITMAPINFOHEADER));
     if(!stream)
     {
-        std::cerr << "ERROR: Can not read file " << name << "." << std::endl;
+        std::cerr << "ERROR: Could not read file " << name << "." << std::endl;
         exit(1);
     }
 
@@ -42,14 +42,14 @@ void BmpImage::createBitmap(std::ifstream &stream)
     bytesPerRow_ = info_.width * bytesPerPixel_;
     data_.resize(info_.height * bytesPerRow_);
 
-    unsigned int padding = (4 - ((bytesPerPixel_ * info_.width) % 4)) % 4;
+    unsigned int padding = (4 - (bytesPerRow_ % 4)) % 4;
     char padding_data[4] = { 0, 0, 0, 0 };
 
     for(unsigned int i = 0; i < info_.height; i++)
     {
         auto data = &data_[(i * bytesPerRow_)];
 
-        stream.read(reinterpret_cast<char *>(data), sizeof(BYTE) * bytesPerPixel_ * info_.width);
+        stream.read(reinterpret_cast<char *>(data), sizeof(BYTE) * bytesPerRow_);
         stream.read(padding_data, padding);
     }
 }
@@ -70,5 +70,31 @@ void BmpImage::rgbToYuv()
         (*green) = static_cast<BYTE>(cb);
         (*red) = static_cast<BYTE>(cr);
     }
+}
+
+void BmpImage::saveImage(const std::string &name) const
+{
+    std::ofstream stream(name, std::ios::binary);
+    if (!stream)
+    {
+        std::cerr << "ERROR: Could not open file " << name << " for writing!" << std::endl;
+        exit(1);
+    }
+
+    stream.write(reinterpret_cast<const char *>(&bmp_), sizeof(BITMAPFILEHEADER));
+    stream.write(reinterpret_cast<const char *>(&info_), sizeof(BITMAPINFOHEADER));
+
+    unsigned int padding = (4 - (bytesPerRow_ % 4)) % 4;
+    char padding_data[4] = { 0, 0, 0, 0 };
+
+    for (unsigned int i = 0; i < info_.height; ++i)
+    {
+        const auto data = &data_[(i * bytesPerRow_)];
+
+        stream.write(reinterpret_cast<const char*>(data), sizeof(BYTE) * bytesPerRow_);
+        stream.write(padding_data, padding);
+    }
+
+    stream.close();
 }
 

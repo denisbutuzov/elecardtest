@@ -26,16 +26,21 @@ struct BITMAPINFOHEADER
     WORD bitsPerPixel;
     DWORD compression;
     DWORD imageSize;
+    DWORD x_pixelsPerMeter;
+    DWORD y_pixelsPerMeter;
+    DWORD clr_used;
+    DWORD clr_important;
 };
 
 class BmpImage
 {
 public:
     BmpImage(const std::string &name);
-    void createBitmap(std::ifstream &stream);
     void rgbToYuv();
     void saveImage(const std::string &name) const;
 private:
+    void createBitmap(std::ifstream &stream);
+
     BITMAPFILEHEADER bmp_;
     BITMAPINFOHEADER info_;
     std::vector<BYTE> data_;
