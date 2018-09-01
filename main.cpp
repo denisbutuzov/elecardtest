@@ -17,24 +17,27 @@ void check_arg(int n) {
 int main(int argc, char **argv) {
     check_arg(argc);
 
-    //argv[1] - video.yuv
-    ifstream video;
-
-    video.open(argv[1], ios::binary);
-    if(!video)
+    //argv[1] - image.bmp
+    ofstream image;
+    image.open(argv[1], ios::binary);
+    if(!image)
     {
         cerr << "Can not open file " << argv[1] << endl;
         exit(1);
     }
 
-    //argv[2] - image.bmp
-    ofstream image;
-    image.open(argv[2], ios::binary);
-    if(!image)
+
+
+
+    //argv[2] - video.yuv
+    ifstream video;
+    video.open(argv[2], ios::binary);
+    if(!video)
     {
         cerr << "Can not open file " << argv[2] << endl;
         exit(1);
     }
+
 
 
 	return 0;
