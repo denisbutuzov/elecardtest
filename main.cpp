@@ -1,6 +1,8 @@
 #include <iostream>
 #include <fstream>
 
+#include "BmpImage.h"
+
 using namespace std;
 
 void check_arg(int n) { 
@@ -18,14 +20,10 @@ int main(int argc, char **argv) {
     check_arg(argc);
 
     //argv[1] - image.bmp
-    ifstream image;
-    image.open(argv[1], ios::binary);
-    if(!image)
-    {
-        cerr << "Can not open file " << argv[1] << endl;
-        exit(1);
-    }
-
+    BmpImage image = BmpImage(argv[1]);
+    cout << "File size is: " << image.fileSize() << endl;
+    cout << "Width is " << image.width() << endl;
+    cout << "Height is " << image.height() << endl;
 
 
 
