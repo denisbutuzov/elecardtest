@@ -21,10 +21,6 @@ int main(int argc, char **argv) {
 
     //argv[1] - image.bmp
     BmpImage image = BmpImage(argv[1]);
-    cout << "File size is: " << image.fileSize() << endl;
-    cout << "Width is " << image.width() << endl;
-    cout << "Height is " << image.height() << endl;
-
 
 
     //argv[2] - video.yuv
