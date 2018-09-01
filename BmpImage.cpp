@@ -17,6 +17,8 @@ BmpImage::BmpImage(std::string name)
         std::cerr << "Can not read file " << name << std::endl;
         exit(1);
     }
+
+    file_.close();
 }
 
 DWORD BmpImage::fileSize() const
