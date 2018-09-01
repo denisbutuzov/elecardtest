@@ -18,7 +18,7 @@ int main(int argc, char **argv) {
     check_arg(argc);
 
     //argv[1] - image.bmp
-    ofstream image;
+    ifstream image;
     image.open(argv[1], ios::binary);
     if(!image)
     {
