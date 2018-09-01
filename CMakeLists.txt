@@ -2,9 +2,11 @@ CMAKE_MINIMUM_REQUIRED(VERSION 3.1)
 PROJECT(TestProject_Elecard)
 
 SET(HEADERS bitTypes.h
-            BmpImage.h)
+            BmpImage.h
+            YuvVideo.h)
 
-SET(SOURCES BmpImage.cpp)
+SET(SOURCES BmpImage.cpp
+            YuvVideo.cpp)
 
 ADD_EXECUTABLE(${PROJECT_NAME} main.cpp ${SOURCES} ${HEADERS})
 TARGET_INCLUDE_DIRECTORIES(${PROJECT_NAME} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
