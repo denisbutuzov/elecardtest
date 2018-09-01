@@ -8,7 +8,7 @@
 #pragma pack(push, 1)
 struct BITMAPFILEHEADER
 {
-     WORD signature;
+     WORD type;
      DWORD fileSize;
      WORD reserved1;
      WORD reserved2;
@@ -18,9 +18,13 @@ struct BITMAPFILEHEADER
 
 struct BITMAPINFOHEADER
 {
-    DWORD dibHeaderSize;
-    DWORD imageWidth;
-    DWORD imageHeight;
+    DWORD size;
+    DWORD width;
+    DWORD height;
+    WORD planes;
+    WORD bitsPerPixel;
+    DWORD compression;
+    DWORD imageSize;
 };
 
 class BmpImage
