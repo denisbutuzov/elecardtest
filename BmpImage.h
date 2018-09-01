@@ -30,7 +30,7 @@ struct BITMAPINFOHEADER
 class BmpImage
 {
 public:
-    BmpImage(std::string name);
+    BmpImage(const std::string &name);
 private:
     BITMAPFILEHEADER bmp_;
     BITMAPINFOHEADER info_;

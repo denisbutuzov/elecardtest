@@ -2,7 +2,7 @@
 
 #include "BmpImage.h"
 
-BmpImage::BmpImage(std::string name)
+BmpImage::BmpImage(const std::string &name)
 {
     std::ifstream stream(name, std::ios::binary);
     if(!stream)
