@@ -22,7 +22,7 @@ struct BITMAPINFOHEADER
 class BmpImage
 {
 public:
-    BmpImage(std::string name) {}
+    BmpImage(std::string name);
     std::string fileSize() const;
 private:
     std::ifstream file_;
