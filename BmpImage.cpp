@@ -31,5 +31,44 @@ BmpImage::BmpImage(const std::string &name)
         exit(1);
     }
 
+    createBitmap(stream);
+
     stream.close();
 }
+
+void BmpImage::createBitmap(std::ifstream &stream)
+{
+    bytesPerPixel_ = static_cast<unsigned char>(info_.bitsPerPixel / 8);
+    bytesPerRow_ = info_.width * bytesPerPixel_;
+    data_.resize(info_.height * bytesPerRow_);
+
+    unsigned int padding = (4 - ((bytesPerPixel_ * info_.width) % 4)) % 4;
+    char padding_data[4] = { 0, 0, 0, 0 };
+
+    for(unsigned int i = 0; i < info_.height; i++)
+    {
+        auto data = &data_[(i * bytesPerRow_)];
+
+        stream.read(reinterpret_cast<char *>(data), sizeof(BYTE) * bytesPerPixel_ * info_.width);
+        stream.read(padding_data, padding);
+    }
+}
+
+void BmpImage::rgbToYuv()
+{
+    for (auto iter = data_.begin(); iter < data_.end(); )
+    {
+        auto blue = iter++;
+        auto green = iter++;
+        auto red = iter++;
+
+        double y = 16.0 + (65.481 * (*red) + 128.553 * (*green) + 24.966 * (*blue)) / 256.0 ;
+        double cb = 128.0 + (-37.797 * (*red) + (-74.203) * (*green) + 112.000 * (*blue)) / 256.0;
+        double cr = 128.0 + (112.000 * (*red) + (-93.786) * (*green) - 18.214 * (*blue)) / 256.0;
+
+        (*blue) = static_cast<BYTE>(y);
+        (*green) = static_cast<BYTE>(cb);
+        (*red) = static_cast<BYTE>(cr);
+    }
+}
+

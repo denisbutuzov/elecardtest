@@ -2,6 +2,7 @@
 
 #include <string>
 #include <fstream>
+#include <vector>
 
 #include "bitTypes.h"
 
@@ -31,7 +32,13 @@ class BmpImage
 {
 public:
     BmpImage(const std::string &name);
+    void createBitmap(std::ifstream &stream);
+    void rgbToYuv();
+    void saveImage(const std::string &name) const;
 private:
     BITMAPFILEHEADER bmp_;
     BITMAPINFOHEADER info_;
+    std::vector<BYTE> data_;
+    unsigned char bytesPerPixel_;
+    unsigned int bytesPerRow_;
 };
