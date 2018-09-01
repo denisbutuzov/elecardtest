@@ -20,7 +20,7 @@ int main(int argc, char **argv) {
     check_arg(argc);
 
     //argv[1] - image.bmp
-    BmpImage image = BmpImage(argv[1]);
+    BmpImage image(argv[1]);
 
 
     //argv[2] - video.yuv
