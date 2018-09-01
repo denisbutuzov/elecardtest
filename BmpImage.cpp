@@ -38,8 +38,8 @@ BmpImage::BmpImage(const std::string &name)
 
 void BmpImage::createBitmap(std::ifstream &stream)
 {
-    bytesPerPixel_ = static_cast<unsigned char>(info_.bitsPerPixel / 8);
-    bytesPerRow_ = info_.width * bytesPerPixel_;
+    unsigned char bytesPerPixel = static_cast<unsigned char>(info_.bitsPerPixel / 8);
+    bytesPerRow_ = info_.width * bytesPerPixel;
     data_.resize(info_.height * bytesPerRow_);
 
     unsigned int padding = (4 - (bytesPerRow_ % 4)) % 4;

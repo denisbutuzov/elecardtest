@@ -44,6 +44,5 @@ private:
     BITMAPFILEHEADER bmp_;
     BITMAPINFOHEADER info_;
     std::vector<BYTE> data_;
-    unsigned char bytesPerPixel_;
     unsigned int bytesPerRow_;
 };
