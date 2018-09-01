@@ -23,7 +23,7 @@ class BmpImage
 {
 public:
     BmpImage(std::string name);
-    std::string fileSize() const;
+    DWORD fileSize() const;
 private:
     std::ifstream file_;
     BITMAPFILEHEADER bmp_;
