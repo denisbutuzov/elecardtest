@@ -22,6 +22,7 @@ BmpImage::BmpImage(std::string name)
     if(bmp_.type != 19778)
     {
         std::cerr << "ERROR: Invalid type value of file " << bmp_.type << ". Expected 19778." << std::endl;
+        exit(1);
     }
 
     if(info_.bitsPerPixel != 24)
