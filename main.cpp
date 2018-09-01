@@ -24,17 +24,8 @@ int main(int argc, char **argv)
     //argv[1] - image.bmp
     BmpImage image(argv[1]);
 
-
-    //argv[2] - video.yuv
-    std::ifstream video;
-    video.open(argv[2], std::ios::binary);
-    if(!video)
-    {
-        std::cerr << "Can not open file " << argv[2] << std::endl;
-        exit(1);
-    }
-
-
+    image.rgbToYuv();
+    image.saveImage(argv[2]);
 
 	return 0;
 }
