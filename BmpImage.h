@@ -5,6 +5,7 @@
 
 #include "bitTypes.h"
 
+#pragma pack(push, 1)
 struct BITMAPFILEHEADER
 {
      WORD signature;
@@ -13,6 +14,7 @@ struct BITMAPFILEHEADER
      WORD reserved2;
      DWORD pixelOffset;
 };
+#pragma pack(pop)
 
 struct BITMAPINFOHEADER
 {
@@ -25,9 +27,6 @@ class BmpImage
 {
 public:
     BmpImage(std::string name);
-    DWORD fileSize() const;
-    DWORD width() const;
-    DWORD height() const;
 private:
     std::ifstream file_;
     BITMAPFILEHEADER bmp_;

@@ -21,18 +21,3 @@ BmpImage::BmpImage(std::string name)
 
     file_.close();
 }
-
-DWORD BmpImage::fileSize() const
-{
-    return bmp_.fileSize/1048576;
-}
-
-DWORD BmpImage::width() const
-{
-    return info_.imageWidth;
-}
-
-DWORD BmpImage::height() const
-{
-    return info_.imageHeight;
-}
