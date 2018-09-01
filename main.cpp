@@ -3,14 +3,14 @@
 
 #include "BmpImage.h"
 
-void check_arg(int n)
+void check_arg(int argNumber)
 {
-    if(n == 1)
+    if(argNumber == 1)
     {
         std::cerr << "ERROR: Too few arguments." << std::endl;
         exit(1);
 	}
-    else if(n == 2)
+    else if(argNumber == 2)
     {
         std::cerr << "ERROR: More arguments is required." << std::endl;
         exit(1);
