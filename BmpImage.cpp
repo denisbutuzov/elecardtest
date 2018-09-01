@@ -7,7 +7,7 @@ BmpImage::BmpImage(std::string name)
     file_.open(name, std::ios::binary);
     if(!file_)
     {
-        std::cerr << "Can not open file " << name << std::endl;
+        std::cerr << "ERROR: Can not open file " << name << std::endl;
         exit(1);
     }
 
@@ -15,7 +15,7 @@ BmpImage::BmpImage(std::string name)
     file_.read(reinterpret_cast<char *>(&info_), sizeof(BITMAPINFOHEADER));
     if(!file_)
     {
-        std::cerr << "Can not read file " << name << std::endl;
+        std::cerr << "ERROR: Can not read file " << name << std::endl;
         exit(1);
     }
 
