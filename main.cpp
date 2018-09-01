@@ -5,18 +5,22 @@
 
 using namespace std;
 
-void check_arg(int n) { 
-    if(n == 1) {
+void check_arg(int n)
+{
+    if(n == 1)
+    {
         cerr << "Too few arguments" << endl;
         exit(1);
 	}
-    else if(n == 2) {
+    else if(n == 2)
+    {
         cerr << "More arguments is required" << endl;
         exit(1);
     }
 }
 
-int main(int argc, char **argv) {
+int main(int argc, char **argv)
+{
     check_arg(argc);
 
     //argv[1] - image.bmp
