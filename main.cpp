@@ -3,18 +3,16 @@
 
 #include "BmpImage.h"
 
-using namespace std;
-
 void check_arg(int n)
 {
     if(n == 1)
     {
-        cerr << "Too few arguments" << endl;
+        std::cerr << "ERROR: Too few arguments." << std::endl;
         exit(1);
 	}
     else if(n == 2)
     {
-        cerr << "More arguments is required" << endl;
+        std::cerr << "ERROR: More arguments is required." << std::endl;
         exit(1);
     }
 }
@@ -28,11 +26,11 @@ int main(int argc, char **argv)
 
 
     //argv[2] - video.yuv
-    ifstream video;
-    video.open(argv[2], ios::binary);
+    std::ifstream video;
+    video.open(argv[2], std::ios::binary);
     if(!video)
     {
-        cerr << "Can not open file " << argv[2] << endl;
+        std::cerr << "Can not open file " << argv[2] << std::endl;
         exit(1);
     }
 
