@@ -32,7 +32,6 @@ class BmpImage
 public:
     BmpImage(std::string name);
 private:
-    std::ifstream file_;
     BITMAPFILEHEADER bmp_;
     BITMAPINFOHEADER info_;
 };

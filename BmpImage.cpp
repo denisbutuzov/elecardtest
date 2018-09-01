@@ -4,16 +4,16 @@
 
 BmpImage::BmpImage(std::string name)
 {
-    file_.open(name, std::ios::binary);
-    if(!file_)
+    std::ifstream stream(name, std::ios::binary);
+    if(!stream)
     {
         std::cerr << "ERROR: Can not open file " << name << "." << std::endl;
         exit(1);
     }
 
-    file_.read(reinterpret_cast<char *>(&bmp_), sizeof(BITMAPFILEHEADER));
-    file_.read(reinterpret_cast<char *>(&info_), sizeof(BITMAPINFOHEADER));
-    if(!file_)
+    stream.read(reinterpret_cast<char *>(&bmp_), sizeof(BITMAPFILEHEADER));
+    stream.read(reinterpret_cast<char *>(&info_), sizeof(BITMAPINFOHEADER));
+    if(!stream)
     {
         std::cerr << "ERROR: Can not read file " << name << "." << std::endl;
         exit(1);
@@ -31,5 +31,5 @@ BmpImage::BmpImage(std::string name)
         exit(1);
     }
 
-    file_.close();
+    stream.close();
 }
