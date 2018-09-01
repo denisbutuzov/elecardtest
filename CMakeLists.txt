@@ -1,7 +1,8 @@
 CMAKE_MINIMUM_REQUIRED(VERSION 3.1)
 PROJECT(TestProject_Elecard)
 
-SET(HEADERS BmpImage.h)
+SET(HEADERS bitTypes.h
+            BmpImage.h)
 
 SET(SOURCES BmpImage.cpp)
 
