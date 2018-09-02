@@ -38,6 +38,7 @@ public:
     BmpImage(const std::string &name);
     void rgbToYuv();
     void saveImage(const std::string &name) const;
+    std::vector<BYTE> yuvData() const;
 private:
     void createBitmap(std::ifstream &stream);
 
