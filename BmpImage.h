@@ -38,12 +38,14 @@ public:
     BmpImage(const std::string &name);
     void rgbToYuv();
     void saveImage(const std::string &name) const;
-    std::vector<BYTE> yuvData() const;
+    void saveYuvImage(const std::string &name) const;
+    void yuvData();
 private:
     void createBitmap(std::ifstream &stream);
 
     BITMAPFILEHEADER bmp_;
     BITMAPINFOHEADER info_;
     std::vector<BYTE> data_;
+    std::vector<BYTE> yuv_data;
     unsigned int bytesPerRow_;
 };

@@ -24,21 +24,8 @@ int main(int argc, char **argv)
     //argv[1] - image.bmp
     BmpImage image(argv[1]);
 
-    std::vector<BYTE> yuvImage = image.yuvData();
-
-    std::ofstream stream(argv[2], std::ios::binary);
-    if (!stream)
-    {
-        std::cerr << "ERROR: Could not open file " << argv[2] << " for writing!" << std::endl;
-        exit(1);
-    }
-
-    for(unsigned int i = 0; i < yuvImage.size() - 1; i++)
-    {
-        stream.write(reinterpret_cast<char *>(yuvImage[i]), sizeof(BYTE));
-    }
-
-    stream.close();
+    image.yuvData();
+    image.saveYuvImage(argv[2]);
 
 	return 0;
 }

@@ -62,7 +62,7 @@ void BmpImage::rgbToYuv()
         auto green = iter++;
         auto red = iter++;
 
-        double y = 16.0 + (65.481 * (*red) + 128.553 * (*green) + 24.966 * (*blue)) / 256.0 ;
+        double y = 16.0 + (65.481 * (*red) + 128.553 * (*green) + 24.966 * (*blue)) / 256.0;
         double cb = 128.0 + (-37.797 * (*red) + (-74.203) * (*green) + 112.000 * (*blue)) / 256.0;
         double cr = 128.0 + (112.000 * (*red) + (-93.786) * (*green) - 18.214 * (*blue)) / 256.0;
 
@@ -98,91 +98,86 @@ void BmpImage::saveImage(const std::string &name) const
     stream.close();
 }
 
-std::vector<BYTE> BmpImage::yuvData() const
+void BmpImage::saveYuvImage(const std::string &name) const
 {
-    std::vector<BYTE> yuv_data;
+    std::ofstream stream(name, std::ios::binary);
+    if (!stream)
+    {
+        std::cerr << "ERROR: Could not open file " << name << " for writing!" << std::endl;
+        exit(1);
+    }
 
+    for (unsigned int i = 0; i < yuv_data.size(); i++)
+    {
+        const auto data = &yuv_data[i];
+
+        stream.write(reinterpret_cast<const char*>(data), sizeof(BYTE));
+    }
+
+    stream.close();
+}
+
+void BmpImage::yuvData()
+{
     for(auto iter = data_.cbegin(); iter < data_.cend(); )
     {
         auto blue = iter++;
         auto green = iter++;
         auto red = iter++;
 
-        double y = 16.0 + (65.481 * (*red) + 128.553 * (*green) + 24.966 * (*blue)) / 256.0 ;
+        double y = 16.0 + (65.481 * (*red) + 128.553 * (*green) + 24.966 * (*blue)) / 256.0;
 
         yuv_data.push_back(static_cast<BYTE>(y));
     }
 
-    std::vector<double> cb_data(4);
+    std::cout << yuv_data.size() << std::endl;
+
+    unsigned int counter = 0;
     for(auto iter = data_.cbegin(); iter < data_.cend(); )
     {
         auto blue = iter++;
         auto green = iter++;
         auto red = iter++;
 
-        cb_data[0] = 128.0 + (-37.797 * (*red) + (-74.203) * (*green) + 112.000 * (*blue)) / 256.0;
-
-        blue = iter++;
-        green = iter++;
-        red = iter++;
-
-        cb_data[1] = 128.0 + (-37.797 * (*red) + (-74.203) * (*green) + 112.000 * (*blue)) / 256.0;
-
-        iter += info_.width - 2;
-        blue = iter++;
-        green = iter++;
-        red = iter++;
-
-        cb_data[2] = 128.0 + (-37.797 * (*red) + (-74.203) * (*green) + 112.000 * (*blue)) / 256.0;
-
-        blue = iter++;
-        green = iter++;
-        red = iter++;
-
-        cb_data[3] = 128.0 + (-37.797 * (*red) + (-74.203) * (*green) + 112.000 * (*blue)) / 256.0;
-
-        iter -= info_.width;
-
-        double cb = (cb_data[0] + cb_data[1] + cb_data[2] + cb_data[3]) / 4;
+        double cb = 128.0 + (-37.797 * (*red) + (-74.203) * (*green) + 112.000 * (*blue)) / 256.0;
 
         yuv_data.push_back(static_cast<BYTE>(cb));
+
+        if(++counter == static_cast<unsigned int>((info_.width + 1) / 2))
+        {
+            iter += (info_.width % 2 == 0) ? (info_.width + 1) * 3 : info_.width * 3;
+            counter = 0;
+        }
+        else
+        {
+            iter += 3;
+        }
     }
 
-    std::vector<double> cr_data(4);
+    std::cout << yuv_data.size() << std::endl;
+
+    counter = 0;
     for(auto iter = data_.cbegin(); iter < data_.cend(); )
     {
         auto blue = iter++;
         auto green = iter++;
         auto red = iter++;
 
-        cr_data[0] = 128.0 + (112.000 * (*red) + (-93.786) * (*green) - 18.214 * (*blue)) / 256.0;
-
-        blue = iter++;
-        green = iter++;
-        red = iter++;
-
-        cr_data[1] = 128.0 + (112.000 * (*red) + (-93.786) * (*green) - 18.214 * (*blue)) / 256.0;
-
-        iter += info_.width - 2;
-        blue = iter++;
-        green = iter++;
-        red = iter++;
-
-        cr_data[2] = 128.0 + (112.000 * (*red) + (-93.786) * (*green) - 18.214 * (*blue)) / 256.0;
-
-        blue = iter++;
-        green = iter++;
-        red = iter++;
-
-        cr_data[3] = 128.0 + (112.000 * (*red) + (-93.786) * (*green) - 18.214 * (*blue)) / 256.0;
-
-        iter -= info_.width;
-
-        double cr = (cr_data[0] + cr_data[1] + cr_data[2] + cr_data[3]) / 4;
+        double cr = 128.0 + (112.000 * (*red) + (-93.786) * (*green) - 18.214 * (*blue)) / 256.0;
 
         yuv_data.push_back(static_cast<BYTE>(cr));
+
+        if(++counter == static_cast<unsigned int>((info_.width + 1) / 2))
+        {
+            iter += (info_.width % 2 == 0) ? (info_.width + 1) * 3 : info_.width * 3;
+            counter = 0;
+        }
+        else
+        {
+            iter += 3;
+        }
     }
 
-    return yuv_data;
+    std::cout << yuv_data.size() << std::endl;
 }
 
