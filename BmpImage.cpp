@@ -54,50 +54,6 @@ void BmpImage::createBitmap(std::ifstream &stream)
     }
 }
 
-void BmpImage::rgbToYuv()
-{
-    for (auto iter = data_.begin(); iter < data_.end(); )
-    {
-        auto blue = iter++;
-        auto green = iter++;
-        auto red = iter++;
-
-        double y = 16.0 + (65.481 * (*red) + 128.553 * (*green) + 24.966 * (*blue)) / 256.0;
-        double cb = 128.0 + (-37.797 * (*red) + (-74.203) * (*green) + 112.000 * (*blue)) / 256.0;
-        double cr = 128.0 + (112.000 * (*red) + (-93.786) * (*green) - 18.214 * (*blue)) / 256.0;
-
-        (*blue) = static_cast<BYTE>(y);
-        (*green) = static_cast<BYTE>(cb);
-        (*red) = static_cast<BYTE>(cr);
-    }
-}
-
-void BmpImage::saveImage(const std::string &name) const
-{
-    std::ofstream stream(name, std::ios::binary);
-    if (!stream)
-    {
-        std::cerr << "ERROR: Could not open file " << name << " for writing!" << std::endl;
-        exit(1);
-    }
-
-    stream.write(reinterpret_cast<const char *>(&bmp_), sizeof(BITMAPFILEHEADER));
-    stream.write(reinterpret_cast<const char *>(&info_), sizeof(BITMAPINFOHEADER));
-
-    unsigned int padding = (4 - (bytesPerRow_ % 4)) % 4;
-    char padding_data[4] = { 0, 0, 0, 0 };
-
-    for (unsigned int i = 0; i < info_.height; ++i)
-    {
-        const auto data = &data_[(i * bytesPerRow_)];
-
-        stream.write(reinterpret_cast<const char*>(data), sizeof(BYTE) * bytesPerRow_);
-        stream.write(padding_data, padding);
-    }
-
-    stream.close();
-}
-
 void BmpImage::saveYuvImage(const std::string &name) const
 {
     std::ofstream stream(name, std::ios::binary);

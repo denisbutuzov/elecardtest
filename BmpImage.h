@@ -36,8 +36,6 @@ class BmpImage
 {
 public:
     BmpImage(const std::string &name);
-    void rgbToYuv();
-    void saveImage(const std::string &name) const;
     void saveYuvImage(const std::string &name) const;
     void yuvData();
 private:
