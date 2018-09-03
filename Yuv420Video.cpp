@@ -1,7 +1,7 @@
 #include <iostream>
 #include <fstream>
 
-#include "YuvVideo.h"
+#include "Yuv420Video.h"
 
 YuvVideo::YuvVideo(const std::string &name)
 {
