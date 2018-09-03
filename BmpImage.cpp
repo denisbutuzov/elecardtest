@@ -54,7 +54,7 @@ void BmpImage::createBitmap(std::ifstream &stream)
     }
 }
 
-Yuv420Image &BmpImage::toYuv420Image()
+Yuv420Image &BmpImage::Yuv420Image()
 {
     std::vector<BYTE> yuv420Data;
 
@@ -113,7 +113,8 @@ Yuv420Image &BmpImage::toYuv420Image()
         }
     }
 
-    Yuv420Image *yuvImage = new Yuv420Image(yuv420Data);
+    class Yuv420Image *yuvImage = new class Yuv420Image(yuv420Data);
+    yuvImage->setSize(info_.width, info_.height);
 
     return *yuvImage;
 }

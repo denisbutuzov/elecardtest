@@ -9,9 +9,15 @@ Yuv420Image::Yuv420Image(std::vector<BYTE> &data)
 
 }
 
-void Yuv420Image::saveImage(const std::string &name) const
+void Yuv420Image::setSize(int width, int height)
 {
-    std::ofstream stream(name, std::ios::binary);
+    width_ = width;
+    height_ = height;
+}
+
+void Yuv420Image::saveOnDisk(const std::string &name) const
+{
+    std::ofstream stream(name, std::ios::binary | std::ios::app);
     if (!stream)
     {
         std::cerr << "ERROR: Could not open file " << name << " for writing!" << std::endl;
@@ -26,3 +32,20 @@ void Yuv420Image::saveImage(const std::string &name) const
 
     stream.close();
 }
+
+int Yuv420Image::width() const
+{
+    return width_;
+}
+
+int Yuv420Image::height() const
+{
+    return height_;
+}
+
+const std::vector<BYTE> &Yuv420Image::data() const
+{
+    return data_;
+}
+
+

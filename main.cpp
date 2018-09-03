@@ -4,6 +4,7 @@
 
 #include "BmpImage.h"
 #include "Yuv420Image.h"
+#include "Yuv420Video.h"
 
 std::pair<int, int> check_arg(int argNumber, char **arg)
 {
@@ -20,6 +21,11 @@ std::pair<int, int> check_arg(int argNumber, char **arg)
     else if(argNumber == 3)
     {
         std::cerr << "ERROR: Video file resolution is required." << std::endl;
+        exit(1);
+    }
+    else if(argNumber == 4)
+    {
+        std::cerr << "ERROR: Result video file name is required." << std::endl;
         exit(1);
     }
 
@@ -47,8 +53,11 @@ int main(int argc, char **argv)
     //argv[1] - image.bmp
     BmpImage image(argv[1]);
 
-    Yuv420Image yuvImage = image.toYuv420Image();
-    yuvImage.saveImage(argv[2]);
+    Yuv420Image yuvImage = image.Yuv420Image();
+
+    Yuv420Video yuvVideo(argv[2], resolution);
+    yuvVideo.setYuv420Image(yuvImage);
+    yuvVideo.saveOnDisk(argv[4]);
 
 	return 0;
 }

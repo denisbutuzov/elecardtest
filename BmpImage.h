@@ -11,12 +11,12 @@ class BmpImage
 {
 public:
     BmpImage(const std::string &name);
-    Yuv420Image &toYuv420Image();
+    class Yuv420Image &Yuv420Image();
 private:
     void createBitmap(std::ifstream &stream);
 
     BITMAPFILEHEADER bmp_;
     BITMAPINFOHEADER info_;
     std::vector<BYTE> data_;
-    Yuv420Image *yuvImage_;
+    class Yuv420Image *yuvImage_;
 };
