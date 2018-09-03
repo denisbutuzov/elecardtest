@@ -20,9 +20,8 @@ void Yuv420Image::saveImage(const std::string &name) const
 
     for (unsigned int i = 0; i < data_.size(); i++)
     {
-        const auto data = &data_[i];
-
-        stream.write(reinterpret_cast<const char*>(data), sizeof(BYTE));
+        const auto *data = &data_[i];
+        stream.write(reinterpret_cast<const char *>(data), sizeof(BYTE));
     }
 
     stream.close();
