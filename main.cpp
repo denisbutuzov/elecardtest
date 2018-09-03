@@ -2,6 +2,7 @@
 #include <fstream>
 
 #include "BmpImage.h"
+#include "Yuv420Image.h"
 
 void check_arg(int argNumber)
 {
@@ -24,8 +25,8 @@ int main(int argc, char **argv)
     //argv[1] - image.bmp
     BmpImage image(argv[1]);
 
-    image.yuvData();
-    image.saveYuvImage(argv[2]);
+    Yuv420Image yuvImage = image.toYuv420Image();
+    yuvImage.saveImage(argv[2]);
 
 	return 0;
 }

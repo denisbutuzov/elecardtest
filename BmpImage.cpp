@@ -1,4 +1,4 @@
-#include <iostream>
+﻿#include <iostream>
 
 #include "BmpImage.h"
 
@@ -54,27 +54,10 @@ void BmpImage::createBitmap(std::ifstream &stream)
     }
 }
 
-void BmpImage::saveYuvImage(const std::string &name) const
+Yuv420Image &BmpImage::toYuv420Image()
 {
-    std::ofstream stream(name, std::ios::binary);
-    if (!stream)
-    {
-        std::cerr << "ERROR: Could not open file " << name << " for writing!" << std::endl;
-        exit(1);
-    }
+    std::vector<BYTE> yuv420Data;
 
-    for (unsigned int i = 0; i < yuv_data.size(); i++)
-    {
-        const auto data = &yuv_data[i];
-
-        stream.write(reinterpret_cast<const char*>(data), sizeof(BYTE));
-    }
-
-    stream.close();
-}
-
-void BmpImage::yuvData()
-{
     for(auto iter = data_.cbegin(); iter < data_.cend(); )
     {
         auto blue = iter++;
@@ -83,10 +66,8 @@ void BmpImage::yuvData()
 
         double y = 16.0 + (65.481 * (*red) + 128.553 * (*green) + 24.966 * (*blue)) / 256.0;
 
-        yuv_data.push_back(static_cast<BYTE>(y));
+        yuv420Data.push_back(static_cast<BYTE>(y));
     }
-
-    std::cout << yuv_data.size() << std::endl;
 
     unsigned int counter = 0;
     for(auto iter = data_.cbegin(); iter < data_.cend(); )
@@ -97,7 +78,7 @@ void BmpImage::yuvData()
 
         double cb = 128.0 + (-37.797 * (*red) + (-74.203) * (*green) + 112.000 * (*blue)) / 256.0;
 
-        yuv_data.push_back(static_cast<BYTE>(cb));
+        yuv420Data.push_back(static_cast<BYTE>(cb));
 
         if(++counter == static_cast<unsigned int>((info_.width + 1) / 2))
         {
@@ -109,8 +90,6 @@ void BmpImage::yuvData()
             iter += 3;
         }
     }
-
-    std::cout << yuv_data.size() << std::endl;
 
     counter = 0;
     for(auto iter = data_.cbegin(); iter < data_.cend(); )
@@ -121,7 +100,7 @@ void BmpImage::yuvData()
 
         double cr = 128.0 + (112.000 * (*red) + (-93.786) * (*green) - 18.214 * (*blue)) / 256.0;
 
-        yuv_data.push_back(static_cast<BYTE>(cr));
+        yuv420Data.push_back(static_cast<BYTE>(cr));
 
         if(++counter == static_cast<unsigned int>((info_.width + 1) / 2))
         {
@@ -134,6 +113,8 @@ void BmpImage::yuvData()
         }
     }
 
-    std::cout << yuv_data.size() << std::endl;
+    Yuv420Image *yuvImage = new Yuv420Image(yuv420Data);
+
+    return *yuvImage;
 }
 

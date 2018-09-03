@@ -5,6 +5,7 @@
 #include <vector>
 
 #include "bitTypes.h"
+#include "Yuv420Image.h"
 
 #pragma pack(push, 1)
 struct BITMAPFILEHEADER
@@ -36,14 +37,14 @@ class BmpImage
 {
 public:
     BmpImage(const std::string &name);
-    void saveYuvImage(const std::string &name) const;
-    void yuvData();
+    Yuv420Image &toYuv420Image();
 private:
     void createBitmap(std::ifstream &stream);
 
     BITMAPFILEHEADER bmp_;
     BITMAPINFOHEADER info_;
     std::vector<BYTE> data_;
-    std::vector<BYTE> yuv_data;
     unsigned int bytesPerRow_;
+
+    Yuv420Image *yuvImage_;
 };
