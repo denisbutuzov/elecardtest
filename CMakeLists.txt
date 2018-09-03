@@ -3,9 +3,11 @@ PROJECT(TestProject_Elecard)
 
 SET(HEADERS bitTypes.h
             BmpImage.h
+            Yuv420Image.h
             YuvVideo.h)
 
 SET(SOURCES BmpImage.cpp
+            Yuv420Image.cpp
             YuvVideo.cpp)
 
 ADD_EXECUTABLE(${PROJECT_NAME} main.cpp ${SOURCES} ${HEADERS})
