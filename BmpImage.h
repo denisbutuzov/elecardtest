@@ -4,7 +4,7 @@
 #include <fstream>
 #include <vector>
 
-#include "bitTypes.h"
+#include "bitmapTypes.h"
 #include "Yuv420Image.h"
 
 class BmpImage

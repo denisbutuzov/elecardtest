@@ -1,7 +1,7 @@
 CMAKE_MINIMUM_REQUIRED(VERSION 3.1)
 PROJECT(TestProject_Elecard)
 
-SET(HEADERS bitTypes.h
+SET(HEADERS bitmapTypes.h
             BmpImage.h
             Yuv420Image.h
             YuvVideo.h)

@@ -3,7 +3,7 @@
 #include <vector>
 #include <string>
 
-#include "bitTypes.h"
+#include "bitmapTypes.h"
 
 class Yuv420Image
 {
