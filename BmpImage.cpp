@@ -39,17 +39,17 @@ BmpImage::BmpImage(const std::string &name)
 void BmpImage::createBitmap(std::ifstream &stream)
 {
     unsigned char bytesPerPixel = static_cast<unsigned char>(info_.bitsPerPixel / 8);
-    bytesPerRow_ = info_.width * bytesPerPixel;
-    data_.resize(info_.height * bytesPerRow_);
+    unsigned int bytesPerRow = info_.width * bytesPerPixel;
+    data_.resize(info_.height * bytesPerRow);
 
-    unsigned int padding = (4 - (bytesPerRow_ % 4)) % 4;
+    unsigned int padding = (4 - (bytesPerRow % 4)) % 4;
     char padding_data[4] = { 0, 0, 0, 0 };
 
     for(unsigned int i = 0; i < info_.height; i++)
     {
-        auto data = &data_[(i * bytesPerRow_)];
+        auto *data = &data_[(i * bytesPerRow)];
 
-        stream.read(reinterpret_cast<char *>(data), sizeof(BYTE) * bytesPerRow_);
+        stream.read(reinterpret_cast<char *>(data), sizeof(BYTE) * bytesPerRow);
         stream.read(padding_data, padding);
     }
 }

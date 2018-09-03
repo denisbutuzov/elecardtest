@@ -18,7 +18,5 @@ private:
     BITMAPFILEHEADER bmp_;
     BITMAPINFOHEADER info_;
     std::vector<BYTE> data_;
-    unsigned int bytesPerRow_;
-
     Yuv420Image *yuvImage_;
 };
