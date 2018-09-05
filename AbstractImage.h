@@ -11,10 +11,10 @@ public:
     const std::vector<unsigned char> &data() const;
     unsigned int width() const;
     unsigned int height() const;
-private:
-    virtual void load(const std::string &fileName) = 0;
 protected:
     void fileSize(const std::string &fileName);
+private:
+    virtual void load(const std::string &fileName) = 0;
 protected:
     std::vector<unsigned char> data_;
     unsigned int width_;
