@@ -1,4 +1,5 @@
 ﻿#include <iostream>
+#include <thread>
 
 #include "BmpImage.h"
 
@@ -102,10 +103,18 @@ void BmpImage::CbCrPlane(std::vector<unsigned char> &vec, BmpImage::PLANE plane)
 Yuv420Image &BmpImage::Yuv420Image()
 {
     std::vector<unsigned char> yuv420Data;
+    std::vector<unsigned char> CbData;
+    std::vector<unsigned char> CrData;
 
+    std::thread th2([&]() { this->CbCrPlane(CbData, PLANE::Cb); });
+    std::thread th3([&]() { this->CbCrPlane(CrData, PLANE::Cr); });
     YPlane(yuv420Data);
-    CbCrPlane(yuv420Data, PLANE::Cb);
-    CbCrPlane(yuv420Data, PLANE::Cr);
+
+    th2.join();
+    th3.join();
+
+    yuv420Data.insert(yuv420Data.end(), std::make_move_iterator(CbData.begin()), std::make_move_iterator(CbData.end()));
+    yuv420Data.insert(yuv420Data.end(), std::make_move_iterator(CrData.begin()), std::make_move_iterator(CrData.end()));
 
     class Yuv420Image *yuvImage = new class Yuv420Image(yuv420Data);
     yuvImage->setSize(width_, height_);
