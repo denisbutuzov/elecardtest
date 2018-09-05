@@ -1,23 +1,22 @@
 #pragma once
 
-#include <string>
-#include <fstream>
-#include <vector>
-
+#include "AbstractImage.h"
 #include "Yuv420Image.h"
+#include "FstreamWrapper.h"
 
 class BmpImage
+        : AbstractImage
 {
 public:
-    BmpImage(const std::string &name);
+    BmpImage(const std::string &fileName);
     class Yuv420Image &Yuv420Image();
 private:
     enum class PLANE { Cb, Cr };
-    void createBitmap(std::ifstream &stream);
+    virtual void load(const std::string &fileName) override final;
+    void readImageData(FstreamWrapper &stream);
     void YPlane(std::vector<unsigned char> &vec);
     void CbCrPlane(std::vector<unsigned char> &vec, PLANE plane);
 private:
-    std::vector<unsigned char> data_;
     class Yuv420Image *yuvImage_;
 
     struct BITMAPFILEHEADER

@@ -3,41 +3,39 @@
 
 #include "BmpImage.h"
 
-BmpImage::BmpImage(const std::string &name)
+BmpImage::BmpImage(const std::string &fileName)
 {
-    std::ifstream stream(name, std::ios::binary);
-    if(!stream)
-    {
-        std::cerr << "ERROR: Could not open file " << name << "for reading." << std::endl;
-        exit(1);
-    }
+    load(fileName);
+}
+
+void BmpImage::load(const std::string &fileName)
+{
+    FstreamWrapper stream(fileName, std::ios::binary | std::ios::in);
 
     stream.read(reinterpret_cast<char *>(&bmp_), sizeof(BITMAPFILEHEADER));
     stream.read(reinterpret_cast<char *>(&info_), sizeof(BITMAPINFOHEADER));
-    if(!stream)
-    {
-        std::cerr << "ERROR: Could not read file " << name << "." << std::endl;
-        exit(1);
-    }
 
+    //Проверяем, что файл формата *.bmp
     if(bmp_.type != 19778)
     {
         std::cerr << "ERROR: Invalid type value of file " << bmp_.type << ". Expected 19778." << std::endl;
         exit(1);
     }
 
+    //Проверяем глубину цвета
     if(info_.bitsPerPixel != 24)
     {
         std::cerr << "ERROR: Invalid bit deph " << info_.bitsPerPixel << ". Expected 24." << std::endl;
         exit(1);
     }
 
-    createBitmap(stream);
+    setSize(info_.width, info_.height);
+    readImageData(stream);
 
     stream.close();
 }
 
-void BmpImage::createBitmap(std::ifstream &stream)
+void BmpImage::readImageData(FstreamWrapper &stream)
 {
     unsigned char bytesPerPixel = static_cast<unsigned char>(info_.bitsPerPixel / 8);
     unsigned int bytesPerRow = info_.width * bytesPerPixel;
@@ -46,17 +44,21 @@ void BmpImage::createBitmap(std::ifstream &stream)
     unsigned int padding = (4 - (bytesPerRow % 4)) % 4;
     char padding_data[4] = { 0, 0, 0, 0 };
 
-    for(unsigned int i = 0; i < info_.height; i++)
+    unsigned int i = info_.height - 1;
+
+    //Читаем, переворачивая изображение
+    do
     {
         auto *data = &data_[(i * bytesPerRow)];
 
         stream.read(reinterpret_cast<char *>(data), sizeof(unsigned char) * bytesPerRow);
         stream.read(padding_data, padding);
-    }
+    } while(--i != 0);
 }
 
 void BmpImage::YPlane(std::vector<unsigned char> &vec)
 {
+    //Формируем яркостную плоскость цветовой модели
     for(auto iter = data_.cbegin(); iter < data_.cend(); )
     {
         auto blue = iter++;
@@ -71,6 +73,7 @@ void BmpImage::YPlane(std::vector<unsigned char> &vec)
 
 void BmpImage::CbCrPlane(std::vector<unsigned char> &vec, BmpImage::PLANE plane)
 {
+    //формируем цветоразностную плоскость цветовой модели в зависимости от параметра 'plane'
     unsigned int counter = 0;
     auto numberSamplesFromRow = static_cast<unsigned int>((info_.width + 1) / 2);
     for(auto iter = data_.cbegin(); iter < data_.cend(); )
@@ -79,6 +82,7 @@ void BmpImage::CbCrPlane(std::vector<unsigned char> &vec, BmpImage::PLANE plane)
         auto green = iter++;
         auto red = iter++;
 
+        //Выбираем цветоразностный канал цветовой модели
         double pl;
         if(plane == PLANE::Cb)
         {
@@ -91,6 +95,7 @@ void BmpImage::CbCrPlane(std::vector<unsigned char> &vec, BmpImage::PLANE plane)
 
         vec.push_back(static_cast<unsigned char>(pl));
 
+        //Итерируемся на следующий пиксель в зависимости от четности пикселей в строке изображения
         if(++counter == numberSamplesFromRow)
         {
             iter += (info_.width % 2 == 0) ? (info_.width + 1) * 3 : info_.width * 3;
@@ -106,13 +111,21 @@ void BmpImage::CbCrPlane(std::vector<unsigned char> &vec, BmpImage::PLANE plane)
 Yuv420Image &BmpImage::Yuv420Image()
 {
     std::vector<unsigned char> yuv420Data;
+    std::vector<unsigned char> CbData;
+    std::vector<unsigned char> CrData;
 
+    std::thread th2([&]() { this->CbCrPlane(CbData, PLANE::Cb); });
+    std::thread th3([&]() { this->CbCrPlane(CrData, PLANE::Cr); });
     YPlane(yuv420Data);
-    CbCrPlane(yuv420Data, PLANE::Cb);
-    CbCrPlane(yuv420Data, PLANE::Cr);
+
+    th2.join();
+    th3.join();
+
+    yuv420Data.insert(yuv420Data.end(), std::make_move_iterator(CbData.begin()), std::make_move_iterator(CbData.end()));
+    yuv420Data.insert(yuv420Data.end(), std::make_move_iterator(CrData.begin()), std::make_move_iterator(CrData.end()));
 
     class Yuv420Image *yuvImage = new class Yuv420Image(yuv420Data);
-    yuvImage->setSize(info_.width, info_.height);
+    yuvImage->setSize(width_, height_);
 
     return *yuvImage;
 }

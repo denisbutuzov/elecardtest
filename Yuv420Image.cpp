@@ -1,27 +1,16 @@
-#include <fstream>
 #include <iostream>
 
+#include "FstreamWrapper.h"
 #include "Yuv420Image.h"
 
 Yuv420Image::Yuv420Image(std::vector<unsigned char> &data)
-    : data_(data)
 {
+    data_ = data;
 }
 
-void Yuv420Image::setSize(unsigned int width, unsigned int height)
+void Yuv420Image::saveOnDisk(const std::string &name)
 {
-    width_ = width;
-    height_ = height;
-}
-
-void Yuv420Image::saveOnDisk(const std::string &name) const
-{
-    std::ofstream stream(name, std::ios::binary | std::ios::app);
-    if (!stream)
-    {
-        std::cerr << "ERROR: Could not open file " << name << " for writing!" << std::endl;
-        exit(1);
-    }
+    FstreamWrapper stream(name, std::ios::binary | std::ios::app);
 
     for (unsigned int i = 0; i < data_.size(); i++)
     {
@@ -32,19 +21,10 @@ void Yuv420Image::saveOnDisk(const std::string &name) const
     stream.close();
 }
 
-unsigned int Yuv420Image::width() const
+void Yuv420Image::load(const std::string &fileName)
 {
-    return width_;
-}
-
-unsigned int Yuv420Image::height() const
-{
-    return height_;
-}
-
-const std::vector<unsigned char> &Yuv420Image::data() const
-{
-    return data_;
+    std::cerr << "There must be a code for load Yuv420Image." << std::endl;
+    exit(1);
 }
 
 

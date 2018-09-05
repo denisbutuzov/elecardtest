@@ -45,9 +45,7 @@ int main(int argc, char **argv)
 {
     std::pair<unsigned int, unsigned int> resolution = check_arg(argc, argv);
 
-    //argv[1] - image.bmp
     BmpImage image(argv[1]);
-
     Yuv420Image yuvImage = image.Yuv420Image();
 
     Yuv420Video yuvVideo(argv[2], resolution);
