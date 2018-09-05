@@ -5,7 +5,8 @@ SET(HEADERS FstreamWrapper.h
             AbstractImage.h
             BmpImage.h
             Yuv420Image.h
-            Yuv420Video.h)
+            Yuv420Video.h
+            Foo.h)
 
 SET(SOURCES FstreamWrapper.cpp
             AbstractImage.cpp
