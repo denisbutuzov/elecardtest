@@ -43,17 +43,16 @@ std::pair<unsigned int, unsigned int> check_arg(int argNumber, char **arg)
 
 int main(int argc, char **argv)
 {
-    //std::pair<unsigned int, unsigned int> resolution = check_arg(argc, argv);
+    std::pair<unsigned int, unsigned int> resolution = check_arg(argc, argv);
 
 //    argv[1] - image.bmp
     BmpImage image(argv[1]);
 
     Yuv420Image yuvImage = image.Yuv420Image();
-    yuvImage.saveOnDisk(argv[2]);
 
-//    Yuv420Video yuvVideo(argv[2], resolution);
-//    yuvVideo.setYuv420Image(yuvImage);
-//    yuvVideo.saveOnDisk(argv[4]);
+    Yuv420Video yuvVideo(argv[2], resolution);
+    yuvVideo.setYuv420Image(yuvImage);
+    yuvVideo.saveOnDisk(argv[4]);
 
 	return 0;
 }
