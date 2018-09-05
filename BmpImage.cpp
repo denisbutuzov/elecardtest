@@ -15,11 +15,14 @@ void BmpImage::load(const std::string &fileName)
     stream.read(reinterpret_cast<char *>(&bmp_), sizeof(BITMAPFILEHEADER));
     stream.read(reinterpret_cast<char *>(&info_), sizeof(BITMAPINFOHEADER));
 
+    //Проверяем, что файл формата *.bmp
     if(bmp_.type != 19778)
     {
         std::cerr << "ERROR: Invalid type value of file " << bmp_.type << ". Expected 19778." << std::endl;
         exit(1);
     }
+
+    //Проверяем глубину цвета
     if(info_.bitsPerPixel != 24)
     {
         std::cerr << "ERROR: Invalid bit deph " << info_.bitsPerPixel << ". Expected 24." << std::endl;
@@ -43,6 +46,7 @@ void BmpImage::readImageData(FstreamWrapper &stream)
 
     unsigned int i = info_.height - 1;
 
+    //Читаем, переворачивая изображение
     do
     {
         auto *data = &data_[(i * bytesPerRow)];
@@ -54,6 +58,7 @@ void BmpImage::readImageData(FstreamWrapper &stream)
 
 void BmpImage::YPlane(std::vector<unsigned char> &vec)
 {
+    //Формируем яркостную плоскость цветовой модели
     for(auto iter = data_.cbegin(); iter < data_.cend(); )
     {
         auto blue = iter++;
@@ -68,6 +73,7 @@ void BmpImage::YPlane(std::vector<unsigned char> &vec)
 
 void BmpImage::CbCrPlane(std::vector<unsigned char> &vec, BmpImage::PLANE plane)
 {
+    //формируем цветоразностную плоскость цветовой модели в зависимости от параметра 'plane'
     unsigned int counter = 0;
     auto numberSamplesFromRow = static_cast<unsigned int>((info_.width + 1) / 2);
     for(auto iter = data_.cbegin(); iter < data_.cend(); )
@@ -76,6 +82,7 @@ void BmpImage::CbCrPlane(std::vector<unsigned char> &vec, BmpImage::PLANE plane)
         auto green = iter++;
         auto red = iter++;
 
+        //Выбираем цветоразностный канал цветовой модели
         double pl;
         if(plane == PLANE::Cb)
         {
@@ -88,6 +95,7 @@ void BmpImage::CbCrPlane(std::vector<unsigned char> &vec, BmpImage::PLANE plane)
 
         vec.push_back(static_cast<unsigned char>(pl));
 
+        //Итерируемся на следующий пиксель в зависимости от четности пикселей в строке изображения
         if(++counter == numberSamplesFromRow)
         {
             iter += (info_.width % 2 == 0) ? (info_.width + 1) * 3 : info_.width * 3;

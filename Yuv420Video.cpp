@@ -40,6 +40,7 @@ void Yuv420Video::saveOnDisk(const std::string &fileName)
 
 void Yuv420Video::overlayPlane(PLANE plane)
 {
+    //Накладываем плоскость цветовой модели изображения на соответсвующую плоскость цветовой модели кадра видеофайла
     std::vector<unsigned char>::const_iterator imageIter;
     std::vector<unsigned char>::iterator frameIter;
     unsigned int scaleSize;
@@ -62,6 +63,7 @@ void Yuv420Video::overlayPlane(PLANE plane)
         scaleSize = 2;
     }
 
+    //Собственно заменяем данные цветовой модели в кадре на данные изображения
     for(unsigned int i = 0; i < yuvImage_.height() / scaleSize; i++)
     {
         std::copy(imageIter, imageIter + yuvImage_.width() / scaleSize, frameIter);
