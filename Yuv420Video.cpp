@@ -33,7 +33,7 @@ void Yuv420Video::saveOnDisk(const std::string &fileName)
         stream.close();
 
         overlayImageOnFrame();
-        saveOnDisk(fileName);
+        Yuv420Image::saveOnDisk(fileName);
     }
 }
 

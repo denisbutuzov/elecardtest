@@ -53,7 +53,7 @@ int main(int argc, char **argv)
 
     Yuv420Video yuvVideo(argv[2], resolution);
     yuvVideo.setYuv420Image(yuvImage);
-    //yuvVideo.saveOnDisk(argv[4]);
+    yuvVideo.saveOnDisk(argv[4]);
 
 //    Foo foo;
 
