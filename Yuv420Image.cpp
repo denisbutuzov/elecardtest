@@ -3,13 +3,12 @@
 
 #include "Yuv420Image.h"
 
-Yuv420Image::Yuv420Image(std::vector<BYTE> &data)
+Yuv420Image::Yuv420Image(std::vector<unsigned char> &data)
     : data_(data)
 {
-
 }
 
-void Yuv420Image::setSize(int width, int height)
+void Yuv420Image::setSize(unsigned int width, unsigned int height)
 {
     width_ = width;
     height_ = height;
@@ -27,23 +26,23 @@ void Yuv420Image::saveOnDisk(const std::string &name) const
     for (unsigned int i = 0; i < data_.size(); i++)
     {
         const auto *data = &data_[i];
-        stream.write(reinterpret_cast<const char *>(data), sizeof(BYTE));
+        stream.write(reinterpret_cast<const char *>(data), sizeof(unsigned char));
     }
 
     stream.close();
 }
 
-int Yuv420Image::width() const
+unsigned int Yuv420Image::width() const
 {
     return width_;
 }
 
-int Yuv420Image::height() const
+unsigned int Yuv420Image::height() const
 {
     return height_;
 }
 
-const std::vector<BYTE> &Yuv420Image::data() const
+const std::vector<unsigned char> &Yuv420Image::data() const
 {
     return data_;
 }

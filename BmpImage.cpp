@@ -49,14 +49,14 @@ void BmpImage::createBitmap(std::ifstream &stream)
     {
         auto *data = &data_[(i * bytesPerRow)];
 
-        stream.read(reinterpret_cast<char *>(data), sizeof(BYTE) * bytesPerRow);
+        stream.read(reinterpret_cast<char *>(data), sizeof(unsigned char) * bytesPerRow);
         stream.read(padding_data, padding);
     }
 }
 
 Yuv420Image &BmpImage::Yuv420Image()
 {
-    std::vector<BYTE> yuv420Data;
+    std::vector<unsigned char> yuv420Data;
 
     for(auto iter = data_.cbegin(); iter < data_.cend(); )
     {
@@ -66,7 +66,7 @@ Yuv420Image &BmpImage::Yuv420Image()
 
         double y = 16.0 + (65.481 * (*red) + 128.553 * (*green) + 24.966 * (*blue)) / 256.0;
 
-        yuv420Data.push_back(static_cast<BYTE>(y));
+        yuv420Data.push_back(static_cast<unsigned char>(y));
     }
 
     unsigned int counter = 0;
@@ -78,7 +78,7 @@ Yuv420Image &BmpImage::Yuv420Image()
 
         double cb = 128.0 + (-37.797 * (*red) + (-74.203) * (*green) + 112.000 * (*blue)) / 256.0;
 
-        yuv420Data.push_back(static_cast<BYTE>(cb));
+        yuv420Data.push_back(static_cast<unsigned char>(cb));
 
         if(++counter == static_cast<unsigned int>((info_.width + 1) / 2))
         {
@@ -100,7 +100,7 @@ Yuv420Image &BmpImage::Yuv420Image()
 
         double cr = 128.0 + (112.000 * (*red) + (-93.786) * (*green) - 18.214 * (*blue)) / 256.0;
 
-        yuv420Data.push_back(static_cast<BYTE>(cr));
+        yuv420Data.push_back(static_cast<unsigned char>(cr));
 
         if(++counter == static_cast<unsigned int>((info_.width + 1) / 2))
         {

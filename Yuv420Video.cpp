@@ -4,7 +4,7 @@
 
 #include "Yuv420Video.h"
 
-Yuv420Video::Yuv420Video(const std::string &name, std::pair<int, int> &resolution)
+Yuv420Video::Yuv420Video(const std::string &name, std::pair<unsigned int, unsigned int> &resolution)
     :  name_(name)
 {
     setSize(resolution.first, resolution.second);
@@ -69,7 +69,7 @@ void Yuv420Video::overlayImageOnFrame()
     auto imageIter = yuvImage_.data().cbegin();
     auto frameIter = data_.begin();
 
-    for(int i = 0; i < yuvImage_.height(); i++)
+    for(unsigned int i = 0; i < yuvImage_.height(); i++)
     {
         std::copy(imageIter, imageIter + yuvImage_.width(), frameIter);
 
@@ -78,7 +78,7 @@ void Yuv420Video::overlayImageOnFrame()
     }
 
     frameIter += (height() - yuvImage_.height()) * width();
-    for(int i = 0; i < yuvImage_.height() / 2; i++)
+    for(unsigned int i = 0; i < yuvImage_.height() / 2; i++)
     {
         std::copy(imageIter, imageIter + yuvImage_.width() / 2, frameIter);
 
@@ -87,7 +87,7 @@ void Yuv420Video::overlayImageOnFrame()
     }
 
     frameIter += (height() - yuvImage_.height()) * width() / 4;
-    for(int i = 0; i < yuvImage_.height() / 2; i++)
+    for(unsigned int i = 0; i < yuvImage_.height() / 2; i++)
     {
         std::copy(imageIter, imageIter + yuvImage_.width() / 2, frameIter);
 

@@ -6,7 +6,7 @@
 #include "Yuv420Image.h"
 #include "Yuv420Video.h"
 
-std::pair<int, int> check_arg(int argNumber, char **arg)
+std::pair<unsigned int, unsigned int> check_arg(int argNumber, char **arg)
 {
     if(argNumber == 1)
     {
@@ -34,9 +34,9 @@ std::pair<int, int> check_arg(int argNumber, char **arg)
     std::string str = arg[3];
     if(std::regex_search(str, match, regExp))
     {
-        std::pair<int, int> resolution;
-        resolution.first = std::stoi(match[1]);
-        resolution.second = std::stoi(match[2]);
+        std::pair<unsigned int, unsigned int> resolution;
+        resolution.first = static_cast<unsigned int>(std::stoi(match[1]));
+        resolution.second = static_cast<unsigned int>(std::stoi(match[2]));
         return resolution;
     }
     else
@@ -48,7 +48,7 @@ std::pair<int, int> check_arg(int argNumber, char **arg)
 
 int main(int argc, char **argv)
 {
-    std::pair<int, int> resolution = check_arg(argc, argv);
+    std::pair<unsigned int, unsigned int> resolution = check_arg(argc, argv);
 
     //argv[1] - image.bmp
     BmpImage image(argv[1]);

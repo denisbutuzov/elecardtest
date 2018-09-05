@@ -3,21 +3,19 @@
 #include <vector>
 #include <string>
 
-#include "bitmapTypes.h"
-
 class Yuv420Image
 {
 public:
     Yuv420Image() = default;
-    Yuv420Image(std::vector<BYTE> &data);
-    void setSize(int width, int height);
+    Yuv420Image(std::vector<unsigned char> &data);
+    void setSize(unsigned int width, unsigned int height);
     void saveOnDisk(const std::string &name) const;
-    int width() const;
-    int height() const;
-    const std::vector<BYTE> &data() const;
+    unsigned int width() const;
+    unsigned int height() const;
+    const std::vector<unsigned char> &data() const;
 protected:
-    std::vector<BYTE> data_;
+    std::vector<unsigned char> data_;
 private:
-    int width_;
-    int height_;
+    unsigned int width_;
+    unsigned int height_;
 };
