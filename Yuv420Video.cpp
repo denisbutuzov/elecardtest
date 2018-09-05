@@ -1,5 +1,6 @@
 #include <iostream>
 #include <algorithm>
+#include <thread>
 
 #include "FstreamWrapper.h"
 #include "Yuv420Video.h"
@@ -78,9 +79,12 @@ void Yuv420Video::overlayPlane(PLANE plane)
 
 void Yuv420Video::overlayImageOnFrame()
 {
+    std::thread th2([&]() { this->overlayPlane(PLANE::Cb); });
+    std::thread th3([&]() { this->overlayPlane(PLANE::Cr); });
     overlayPlane(PLANE::Y);
-    overlayPlane(PLANE::Cb);
-    overlayPlane(PLANE::Cr);
+
+    th2.join();
+    th3.join();
 }
 
 
