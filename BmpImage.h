@@ -11,10 +11,11 @@ class BmpImage
 public:
     BmpImage(const std::string &name);
     class Yuv420Image &Yuv420Image();
-
 private:
+    enum class PLANE { Cb, Cr };
     void createBitmap(std::ifstream &stream);
-
+    void YPlane(std::vector<unsigned char> &vec);
+    void CbCrPlane(std::vector<unsigned char> &vec, PLANE plane);
 private:
     std::vector<unsigned char> data_;
     class Yuv420Image *yuvImage_;

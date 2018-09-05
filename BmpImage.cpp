@@ -1,4 +1,5 @@
 ﻿#include <iostream>
+#include <thread>
 
 #include "BmpImage.h"
 
@@ -54,10 +55,8 @@ void BmpImage::createBitmap(std::ifstream &stream)
     }
 }
 
-Yuv420Image &BmpImage::Yuv420Image()
+void BmpImage::YPlane(std::vector<unsigned char> &vec)
 {
-    std::vector<unsigned char> yuv420Data;
-
     for(auto iter = data_.cbegin(); iter < data_.cend(); )
     {
         auto blue = iter++;
@@ -66,21 +65,33 @@ Yuv420Image &BmpImage::Yuv420Image()
 
         double y = 16.0 + (65.481 * (*red) + 128.553 * (*green) + 24.966 * (*blue)) / 256.0;
 
-        yuv420Data.push_back(static_cast<unsigned char>(y));
+        vec.push_back(static_cast<unsigned char>(y));
     }
+}
 
+void BmpImage::CbCrPlane(std::vector<unsigned char> &vec, BmpImage::PLANE plane)
+{
     unsigned int counter = 0;
+    auto numberSamplesFromRow = static_cast<unsigned int>((info_.width + 1) / 2);
     for(auto iter = data_.cbegin(); iter < data_.cend(); )
     {
         auto blue = iter++;
         auto green = iter++;
         auto red = iter++;
 
-        double cb = 128.0 + (-37.797 * (*red) + (-74.203) * (*green) + 112.000 * (*blue)) / 256.0;
+        double pl;
+        if(plane == PLANE::Cb)
+        {
+            pl = 128.0 + (-37.797 * (*red) + (-74.203) * (*green) + 112.000 * (*blue)) / 256.0;
+        }
+        else
+        {
+            pl = 128.0 + (112.000 * (*red) + (-93.786) * (*green) - 18.214 * (*blue)) / 256.0;
+        }
 
-        yuv420Data.push_back(static_cast<unsigned char>(cb));
+        vec.push_back(static_cast<unsigned char>(pl));
 
-        if(++counter == static_cast<unsigned int>((info_.width + 1) / 2))
+        if(++counter == numberSamplesFromRow)
         {
             iter += (info_.width % 2 == 0) ? (info_.width + 1) * 3 : info_.width * 3;
             counter = 0;
@@ -90,28 +101,15 @@ Yuv420Image &BmpImage::Yuv420Image()
             iter += 3;
         }
     }
+}
 
-    counter = 0;
-    for(auto iter = data_.cbegin(); iter < data_.cend(); )
-    {
-        auto blue = iter++;
-        auto green = iter++;
-        auto red = iter++;
+Yuv420Image &BmpImage::Yuv420Image()
+{
+    std::vector<unsigned char> yuv420Data;
 
-        double cr = 128.0 + (112.000 * (*red) + (-93.786) * (*green) - 18.214 * (*blue)) / 256.0;
-
-        yuv420Data.push_back(static_cast<unsigned char>(cr));
-
-        if(++counter == static_cast<unsigned int>((info_.width + 1) / 2))
-        {
-            iter += (info_.width % 2 == 0) ? (info_.width + 1) * 3 : info_.width * 3;
-            counter = 0;
-        }
-        else
-        {
-            iter += 3;
-        }
-    }
+    YPlane(yuv420Data);
+    CbCrPlane(yuv420Data, PLANE::Cb);
+    CbCrPlane(yuv420Data, PLANE::Cr);
 
     class Yuv420Image *yuvImage = new class Yuv420Image(yuv420Data);
     yuvImage->setSize(info_.width, info_.height);

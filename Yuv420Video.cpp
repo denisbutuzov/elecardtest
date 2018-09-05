@@ -64,36 +64,44 @@ void Yuv420Video::saveOnDisk(const std::string &name)
     }
 }
 
+void Yuv420Video::overlayPlane(PLANE plane)
+{
+    std::vector<unsigned char>::const_iterator imageIter;
+    std::vector<unsigned char>::iterator frameIter;
+    unsigned int scaleSize;
+
+    switch(plane)
+    {
+    case PLANE::Y:
+        imageIter = yuvImage_.data().cbegin();
+        frameIter = data_.begin();
+        scaleSize = 1;
+        break;
+    case PLANE::Cb:
+        imageIter = yuvImage_.data().cbegin() + yuvImage_.height() * yuvImage_.width();
+        frameIter = data_.begin() + height() * width();
+        scaleSize = 2;
+        break;
+    case PLANE::Cr:
+        imageIter = yuvImage_.data().cbegin() +  5 * yuvImage_.height() * yuvImage_.width() / 4;
+        frameIter = data_.begin() + 5 * height() * width() / 4;
+        scaleSize = 2;
+    }
+
+    for(unsigned int i = 0; i < yuvImage_.height() / scaleSize; i++)
+    {
+        std::copy(imageIter, imageIter + yuvImage_.width() / scaleSize, frameIter);
+
+        imageIter += yuvImage_.width() / scaleSize;
+        frameIter += width() / scaleSize;
+    }
+}
+
 void Yuv420Video::overlayImageOnFrame()
 {
-    auto imageIter = yuvImage_.data().cbegin();
-    auto frameIter = data_.begin();
-
-    for(unsigned int i = 0; i < yuvImage_.height(); i++)
-    {
-        std::copy(imageIter, imageIter + yuvImage_.width(), frameIter);
-
-        imageIter += yuvImage_.width();
-        frameIter += width();
-    }
-
-    frameIter += (height() - yuvImage_.height()) * width();
-    for(unsigned int i = 0; i < yuvImage_.height() / 2; i++)
-    {
-        std::copy(imageIter, imageIter + yuvImage_.width() / 2, frameIter);
-
-        imageIter += yuvImage_.width() / 2;
-        frameIter += width() / 2;
-    }
-
-    frameIter += (height() - yuvImage_.height()) * width() / 4;
-    for(unsigned int i = 0; i < yuvImage_.height() / 2; i++)
-    {
-        std::copy(imageIter, imageIter + yuvImage_.width() / 2, frameIter);
-
-        imageIter += yuvImage_.width() / 2;
-        frameIter += width() / 2;
-    }
+    overlayPlane(PLANE::Y);
+    overlayPlane(PLANE::Cb);
+    overlayPlane(PLANE::Cr);
 }
 
 
