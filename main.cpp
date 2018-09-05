@@ -8,25 +8,21 @@
 
 std::pair<unsigned int, unsigned int> check_arg(int argNumber, char **arg)
 {
-    if(argNumber == 1)
+    switch(argNumber)
     {
+    case 1:
         std::cerr << "ERROR: Too few arguments." << std::endl;
         exit(1);
-	}
-    else if(argNumber == 2)
-    {
+    case 2:
         std::cerr << "ERROR: More arguments is required." << std::endl;
         exit(1);
-    }
-    else if(argNumber == 3)
-    {
+    case 3:
         std::cerr << "ERROR: Video file resolution is required." << std::endl;
         exit(1);
-    }
-    else if(argNumber == 4)
-    {
+    case 4:
         std::cerr << "ERROR: Result video file name is required." << std::endl;
         exit(1);
+    default: ;
     }
 
     std::regex regExp("(.*)x(.*)");
