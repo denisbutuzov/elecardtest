@@ -38,12 +38,6 @@ void Yuv420Video::saveOnDisk(const std::string &fileName)
     }
 }
 
-void Yuv420Video::load(const std::string &fileName)
-{
-    std::cerr << "There must be a code for load Yuv420Video." << std::endl;
-    exit(1);
-}
-
 void Yuv420Video::overlayPlane(PLANE plane)
 {
     std::vector<unsigned char>::const_iterator imageIter;
@@ -85,6 +79,12 @@ void Yuv420Video::overlayImageOnFrame()
 
     th2.join();
     th3.join();
+}
+
+void Yuv420Video::load(const std::string &fileName)
+{
+    std::cerr << "There must be a code for load Yuv420Video." << std::endl;
+    exit(1);
 }
 
 
