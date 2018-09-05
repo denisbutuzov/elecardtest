@@ -2,12 +2,12 @@
 
 #include "FstreamWrapper.h"
 
-FstreamWrapper::FstreamWrapper(const char *filename, std::ios_base::openmode mode)
-    : std::fstream(filename, mode)
+FstreamWrapper::FstreamWrapper(const std::string &fileName, std::ios_base::openmode mode)
+    : std::fstream(fileName, mode)
 {
     if(!*this)
     {
-        std::cerr << "ERROR: Could not open file " << filename << "." << std::endl;
+        std::cerr << "ERROR: Could not open file " << fileName << "." << std::endl;
         exit(1);
     }
 }
@@ -24,7 +24,7 @@ std::fstream &FstreamWrapper::read(char *s, std::streamsize n)
     return *this;
 }
 
-std::fstream &FstreamWrapper::write(char *s, std::streamsize n)
+std::fstream &FstreamWrapper::write(const char *s, std::streamsize n)
 {
     std::fstream::write(s, n);
     if(!*this)

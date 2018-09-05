@@ -6,16 +6,16 @@ class Yuv420Video
         : public Yuv420Image
 {
 public:
-    Yuv420Video(const std::string &name, std::pair<unsigned int, unsigned int> &resolution);
-    long fileSize();
+    Yuv420Video(const std::string &fileName, std::pair<unsigned int, unsigned int> &resolution);
     void setYuv420Image(const Yuv420Image &image);
-    void saveOnDisk(const std::string &name);
+    void saveOnDisk(const std::string &fileName) override final;
 private:
     enum class PLANE { Y, Cb, Cr };
+    virtual void load(const std::string &fileName) override final;
     void overlayPlane(PLANE plane);
     void overlayImageOnFrame();
 private:
-    std::string name_;
+    std::string fileName_;
     unsigned int bytesPerFrame_;
     unsigned int framesNumber_;
     Yuv420Image yuvImage_;

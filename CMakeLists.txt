@@ -1,12 +1,14 @@
 CMAKE_MINIMUM_REQUIRED(VERSION 3.1)
 PROJECT(ElecardTestProject)
 
-SET(HEADERS AbstractImage.h
+SET(HEADERS FstreamWrapper.h
+            AbstractImage.h
             BmpImage.h
             Yuv420Image.h
             Yuv420Video.h)
 
-SET(SOURCES AbstractImage.cpp
+SET(SOURCES FstreamWrapper.cpp
+            AbstractImage.cpp
             BmpImage.cpp
             Yuv420Image.cpp
             Yuv420Video.cpp)
