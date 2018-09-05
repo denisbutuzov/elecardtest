@@ -40,13 +40,15 @@ void BmpImage::readImageData(FstreamWrapper &stream)
     unsigned int padding = (4 - (bytesPerRow % 4)) % 4;
     char padding_data[4] = { 0, 0, 0, 0 };
 
-    for(unsigned int i = 0; i < info_.height; i++)
+    unsigned int i = info_.height - 1;
+
+    do
     {
         auto *data = &data_[(i * bytesPerRow)];
 
         stream.read(reinterpret_cast<char *>(data), sizeof(unsigned char) * bytesPerRow);
         stream.read(padding_data, padding);
-    }
+    } while(--i != 0);
 }
 
 void BmpImage::YPlane(std::vector<unsigned char> &vec)
